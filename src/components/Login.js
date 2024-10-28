@@ -1,13 +1,41 @@
-import styled from "styled-components";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
+import { signInApi } from "../actions";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const Login = (props) => {
+  // const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleSignIn = async () => {
+    try {
+      await props.signIn(); // Await the sign-in to ensure it completes
+    } catch (error) {
+      console.error("Sign-in error:", error); // Log any errors
+    }
+  };
+
+  // Effect to navigate when user state changes
+  // useEffect(() => {
+  //   if (props.user) {
+  //     navigate('/home'); // Navigate to home if user is set
+  //   }
+  // }, [props.user, navigate]); // Run this effect when props.user changes
+
+  // Log the current user state
+  console.log("Current user:", props.user);
+
   return (
     <Container>
+      {props.user ? (
+        <Navigate to="/home" replace /> // Redirect if user is authenticated
+      ) : (
+     <>
       <Nav>
         <a href="/">
-          <img src="/images/login-logo.svg" alt="" />
+          <img src="/images/login-logo.svg" alt="Login Logo" />
         </a>
+        <Link to="/home">Go to Home</Link>
         <div>
           <Join>Join now</Join>
           <SignIn>Sign in</SignIn>
@@ -16,18 +44,20 @@ const Login = (props) => {
       <Section>
         <Hero>
           <h1>Welcome to your professional community</h1>
-          <img src="/images/login-hero.svg" alt="" />
+          <img src="/images/login-hero.svg" alt="Hero" />
         </Hero>
         <Form>
-          <Google>
-            <img src="/images/google.svg" alt="" />
+          <Google onClick={handleSignIn}>
+            <img src="/images/google.svg" alt="Google Icon" />
             Sign in with Google
           </Google>
         </Form>
       </Section>
+     </>)}
     </Container>
   );
 };
+
 const Container = styled.div`
   padding: 0px;
 `;
@@ -38,7 +68,6 @@ const Nav = styled.nav`
   padding: 12px 0 16px;
   display: flex;
   align-items: center;
-  position: relative;
   justify-content: space-between;
   flex-wrap: nowrap;
 
@@ -87,8 +116,6 @@ const Section = styled.section`
   display: flex;
   align-content: start;
   min-height: 700px;
-  padding-bottom: 138px;
-  padding-top: 40px;
   padding: 60px 0;
   position: relative;
   flex-wrap: wrap;
@@ -98,15 +125,13 @@ const Section = styled.section`
   margin: auto;
 
   @media (max-width: 768px) {
-    margin: auto;
-    min-height: 0px;
+    min-height: 0;
   }
 `;
 
 const Hero = styled.div`
   width: 100%;
   h1 {
-    padding-bottom: 0;
     width: 55%;
     font-size: 56px;
     color: #2977c9;
@@ -121,7 +146,6 @@ const Hero = styled.div`
   }
 
   img {
-    /* z-index: -1; */
     width: 700px;
     height: 670px;
     position: absolute;
@@ -129,9 +153,9 @@ const Hero = styled.div`
     right: -200px;
     @media (max-width: 768px) {
       top: 230px;
-      width: initial;
-      position: initial;
-      height: initial;
+      width: auto;
+      height: auto;
+      position: static;
     }
   }
 `;
@@ -147,35 +171,27 @@ const Form = styled.div`
 const Google = styled.button`
   display: flex;
   justify-content: center;
-  background-color: #fff;
   align-items: center;
   height: 56px;
   width: 100%;
   border-radius: 28px;
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 60%),
-    inset 0 0 0 2px rgb(0 0 0 / 0%) inset 0 0 0 1px rgb(0 0 0 / 0);
-
-  vertical-align: middle;
-  z-index: 0;
-  transition-duration: 167ms;
+  background-color: #fff;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 60%), inset 0 0 0 2px rgb(0 0 0 / 0%),
+    inset 0 0 0 1px rgb(0 0 0 / 0);
   font-size: 20px;
   color: rgba(0, 0, 0, 0.6);
+  transition-duration: 167ms;
   &:hover {
     background-color: rgba(207, 207, 207, 0.25);
     color: rgba(0, 0, 0, 0.75);
   }
-  @media (max-width: 768px) {
-    width: 100%;
-    /* margin-left: 25px; */
-  }
 `;
+const mapStateToProps = (state) => ({
+  user: state.userState.user,
+});
 
-const mapStateToProps = (state) => {
-  return {};
-};
-const mapDispatchToProps = (dispatch) => {
-  {
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+  signIn: () => dispatch(signInApi()),
+});
 
-export default connect(mapStateToProps,mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

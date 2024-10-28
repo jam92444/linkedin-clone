@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-const Header = (props) => {
+const Header = () => {
+
   return (
     <Container>
       <Content>
@@ -53,9 +54,15 @@ const Header = (props) => {
 
             <User>
               <a>
+                {/* {user && user.photoURL ? (
+                  <img src={user.photoURL} alt="" />
+                ) : (
+                )} */}
                 <img src="/images/user.svg" alt="" />
-                <span><span>Me</span><img src="/images/down-icon.svg" alt="" /></span>
-                
+                <span>
+                  Me
+                  <img src="/images/down-icon.svg" alt="" />
+                </span>
               </a>
               <SignOut>
                 <a>Sign Out</a>
@@ -203,15 +210,14 @@ const NavList = styled.li`
 const SignOut = styled.div`
   position: absolute;
   top: 45px;
-  background:white;
+  background: white;
   border-radius: 0 0 5px 5px;
   width: 100px;
   height: 40px;
   font-size: 16px;
-  transition-duration:167ms ;
+  transition-duration: 167ms;
   text-align: center;
   display: none;
-
 `;
 const User = styled(NavList)`
   a > img {
@@ -224,8 +230,8 @@ const User = styled(NavList)`
     align-items: center;
   }
 
-  &:hover{
-    ${SignOut}{
+  &:hover {
+    ${SignOut} {
       align-items: center;
       display: flex;
       justify-content: center;
@@ -235,7 +241,5 @@ const User = styled(NavList)`
 const Work = styled(User)`
   border-left: 1px solid rgba(0, 0, 0, 0.08);
 `;
-
-
 
 export default Header;
